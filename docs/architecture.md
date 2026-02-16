@@ -27,6 +27,14 @@ Root namespace structure:
 - `src/Audit/{Domain,Application,Infrastructure,UI}`
 - `src/Shared/{Domain,Application,Infrastructure,UI}`
 
+## Repository Layout Rationale
+
+The repository keeps a single Symfony application at root (`src`, `config`, `public`) by design.
+
+- The project is a Symfony full-stack monolith (Twig + Turbo + Live Components), not a separated SPA.
+- Splitting into `backend/` and `frontend/` would add indirection without architectural benefit for current constraints.
+- Frontend behavior remains in the Symfony app boundary and follows DDD/UI layering inside `src/*/UI`.
+
 ## Dependency Rules (Mandatory)
 
 Allowed dependencies:
