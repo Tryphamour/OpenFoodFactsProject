@@ -57,11 +57,8 @@ Must demonstrate events, voters, attributes where relevant.
 
 ### Remaining M2 Steps
 
-- Replace temporary in-memory security persistence with PostgreSQL persistence:
-  - security user state
-  - 2FA challenges
-  - audit trail records
 - Add functional tests for end-to-end login + 2FA + lock scenarios.
+- Validate migrations against running PostgreSQL service in Docker end-to-end flow.
 
 ## Symfony Runtime Integration (Implemented)
 
@@ -78,12 +75,20 @@ Must demonstrate events, voters, attributes where relevant.
   - login throttling in security firewall
   - dedicated rate limiter for 2FA verification
 
-## Temporary M2 Tradeoff
+## PostgreSQL Persistence Integration (Implemented)
 
-To validate flow quickly and keep DDD boundaries stable, current runtime adapters are in-memory:
+The following ports now use Doctrine-backed adapters:
 
-- `InMemorySecurityUserRepository`
-- `InMemorySecondFactorChallengeRepository`
-- `InMemoryIdentityStore`
+- `SecurityUserRepository` -> `DoctrineSecurityUserRepository`
+- `SecondFactorChallengeRepository` -> `DoctrineSecondFactorChallengeRepository`
+- `SecurityAuditTrail` -> `DoctrineSecurityAuditTrail`
 
-These adapters are intentionally transitional and will be replaced by PostgreSQL-backed infrastructure before M2 closure.
+Persisted infrastructure records:
+
+- `security_users`
+- `second_factor_challenges`
+- `security_audit_events`
+
+Migration:
+
+- `migrations/Version20260216165000.php` creates tables and seeds initial admin account.

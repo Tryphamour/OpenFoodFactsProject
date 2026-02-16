@@ -30,7 +30,6 @@ Implement robust authentication with password + email 2FA, account lock policy, 
    - repository/audit/policy provider ports
 4. Documented architecture/security decisions in `docs/security.md`.
 5. Remaining:
-   - PostgreSQL persistence for user security state / challenges / audit
    - functional tests for full auth journey
 6. Implemented Symfony runtime integration:
    - login authenticator (`LoginFormAuthenticator`)
@@ -38,6 +37,15 @@ Implement robust authentication with password + email 2FA, account lock policy, 
    - route protection and 2FA enforcement subscriber
    - login throttling + dedicated 2FA rate limiter
 7. Implemented temporary in-memory infrastructure adapters to validate end-to-end flow before DB migration.
+8. Added Doctrine ORM + migrations and replaced security persistence adapters with PostgreSQL-ready Doctrine implementations:
+   - `DoctrineSecurityUserRepository`
+   - `DoctrineSecondFactorChallengeRepository`
+   - `DoctrineSecurityAuditTrail`
+9. Added infrastructure entities and migration:
+   - `security_users`
+   - `second_factor_challenges`
+   - `security_audit_events`
+   - initial admin seed in `migrations/Version20260216165000.php`
 
 ## Verification
 - TDD cycle completed for domain model:
@@ -48,8 +56,10 @@ Implement robust authentication with password + email 2FA, account lock policy, 
   - `13 tests, 27 assertions` PASS (`vendor/bin/simple-phpunit`)
 - Symfony bootstrap:
   - `php bin/console debug:router` PASS in Docker (routes registered for login/2fa/dashboard)
+  - `php bin/console about` PASS in Docker with `DATABASE_URL` set
 - Pending verification:
-  - integration/functional coverage once PostgreSQL persistence is wired
+  - migration execution and full flow against running PostgreSQL service
+  - functional auth journey tests
 
 ## Acceptance Criteria
 - Account locks after 5 failed attempts with configurable duration.
@@ -57,4 +67,4 @@ Implement robust authentication with password + email 2FA, account lock policy, 
 - Lock/unlock and 2FA critical transitions are auditable.
 
 ## Review Notes
-M2 is in progress. Domain model and Symfony runtime integration are in place and tested; PostgreSQL-backed persistence and full functional auth tests are still required before closure.
+M2 is in progress. Domain model, runtime integration, and Doctrine persistence adapters are in place; migration execution against live PostgreSQL and full functional auth tests are still required before closure.

@@ -69,10 +69,10 @@ services:
         resource: '../src/Audit/UI/'
 
     App\IdentityAccess\Application\Port\SecurityUserRepository:
-        alias: App\IdentityAccess\Infrastructure\Repository\InMemorySecurityUserRepository
+        alias: App\IdentityAccess\Infrastructure\Repository\DoctrineSecurityUserRepository
 
     App\IdentityAccess\Application\Port\SecondFactorChallengeRepository:
-        alias: App\IdentityAccess\Infrastructure\Repository\InMemorySecondFactorChallengeRepository
+        alias: App\IdentityAccess\Infrastructure\Repository\DoctrineSecondFactorChallengeRepository
 
     App\IdentityAccess\Application\Port\AccountLockPolicyProvider:
         class: App\IdentityAccess\Infrastructure\Security\FixedAccountLockPolicyProvider
@@ -93,7 +93,7 @@ services:
         alias: App\IdentityAccess\Infrastructure\Security\MailerSecondFactorCodeSender
 
     App\IdentityAccess\Application\Port\SecurityAuditTrail:
-        alias: App\IdentityAccess\Infrastructure\Security\LoggerSecurityAuditTrail
+        alias: App\IdentityAccess\Infrastructure\Security\DoctrineSecurityAuditTrail
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

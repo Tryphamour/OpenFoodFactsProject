@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\IdentityAccess\Infrastructure\Security;
 
+use App\IdentityAccess\Infrastructure\Persistence\Doctrine\Entity\SecurityUserRecord;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,21 +13,29 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 final readonly class AppUserProvider implements UserProviderInterface
 {
-    public function __construct(private InMemoryIdentityStore $store)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 
     public function loadUserByIdentifier(string $identifier): UserInterface
     {
-        $user = $this->store->getAppUserByEmail($identifier);
-        if ($user === null) {
+        /** @var SecurityUserRecord|null $record */
+        $record = $this->entityManager->getRepository(SecurityUserRecord::class)
+            ->findOneBy(['email' => strtolower($identifier)]);
+
+        if ($record === null) {
             $exception = new UserNotFoundException(sprintf('User "%s" was not found.', $identifier));
             $exception->setUserIdentifier($identifier);
 
             throw $exception;
         }
 
-        return $user;
+        return new AppUser(
+            id: $record->id,
+            email: $record->email,
+            passwordHash: $record->passwordHash,
+            roles: $record->roles,
+        );
     }
 
     public function refreshUser(UserInterface $user): UserInterface
@@ -42,4 +52,3 @@ final readonly class AppUserProvider implements UserProviderInterface
         return is_a($class, AppUser::class, true);
     }
 }
-

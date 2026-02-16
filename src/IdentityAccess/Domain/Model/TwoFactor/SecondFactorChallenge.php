@@ -56,6 +56,26 @@ final class SecondFactorChallenge
         );
     }
 
+    public static function reconstitute(
+        string $id,
+        string $userId,
+        string $codeHash,
+        \DateTimeImmutable $expiresAt,
+        int $maxAttempts,
+        int $attempts,
+        ?\DateTimeImmutable $verifiedAt,
+    ): self {
+        return new self(
+            id: $id,
+            userId: $userId,
+            codeHash: $codeHash,
+            expiresAt: $expiresAt,
+            maxAttempts: $maxAttempts,
+            attempts: $attempts,
+            verifiedAt: $verifiedAt,
+        );
+    }
+
     public function verify(string $submittedCode, \DateTimeImmutable $now): bool
     {
         if ($this->verifiedAt !== null) {
@@ -104,5 +124,20 @@ final class SecondFactorChallenge
     public function expiresAt(): \DateTimeImmutable
     {
         return $this->expiresAt;
+    }
+
+    public function codeHash(): string
+    {
+        return $this->codeHash;
+    }
+
+    public function maxAttempts(): int
+    {
+        return $this->maxAttempts;
+    }
+
+    public function verifiedAt(): ?\DateTimeImmutable
+    {
+        return $this->verifiedAt;
     }
 }
