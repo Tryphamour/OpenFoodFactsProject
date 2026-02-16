@@ -1,0 +1,60 @@
+<section>
+    <h2>Widgets</h2>
+
+    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+        <button data-action="live#action" data-live-action-param="addWidget" data-live-type-param="product_search">Add product search</button>
+        <button data-action="live#action" data-live-action-param="addWidget" data-live-type-param="nutriscore_distribution">Add NutriScore distribution</button>
+        <button data-action="live#action" data-live-action-param="addWidget" data-live-type-param="additives_overview">Add additives overview</button>
+    </div>
+
+    <p style="font-size: 0.9rem;">Drag and drop to reorder, then click "Save order".</p>
+
+    <ul id="dashboard-widgets-list" style="list-style: none; padding: 0;">
+        {% for widget in this.widgets %}
+            <li data-widget-id="{{ widget.id }}" style="border: 1px solid #ccc; margin: 8px 0; padding: 10px;">
+                <strong>{{ widget.type }}</strong> (#{{ widget.position }})
+
+                <div style="margin-top: 8px;">
+                    <input id="query-{{ widget.id }}" type="text" placeholder="query" value="{{ widget.configuration.query|default('') }}">
+                    <button
+                        data-action="live#action"
+                        data-live-action-param="configureWidget"
+                        data-live-widgetId-param="{{ widget.id }}"
+                        data-live-query-param=""
+                        onclick="this.dataset.liveQueryParam = document.getElementById('query-{{ widget.id }}').value;"
+                    >
+                        Save config
+                    </button>
+                    <button data-action="live#action" data-live-action-param="removeWidget" data-live-widgetId-param="{{ widget.id }}">Remove</button>
+                </div>
+            </li>
+        {% else %}
+            <li>No widget yet.</li>
+        {% endfor %}
+    </ul>
+
+    <form id="dashboard-reorder-form" method="post" action="{{ path('dashboard_reorder') }}">
+        <input type="hidden" name="ordered_ids" id="dashboard-ordered-ids" value="">
+        <button type="submit">Save order</button>
+    </form>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
+<script>
+    (() => {
+        const list = document.getElementById('dashboard-widgets-list');
+        if (!list || typeof Sortable === 'undefined') {
+            return;
+        }
+
+        new Sortable(list, {
+            animation: 150
+        });
+
+        const form = document.getElementById('dashboard-reorder-form');
+        form?.addEventListener('submit', function () {
+            const ids = Array.from(list.querySelectorAll('[data-widget-id]')).map((el) => el.dataset.widgetId);
+            document.getElementById('dashboard-ordered-ids').value = ids.join(',');
+        });
+    })();
+</script>

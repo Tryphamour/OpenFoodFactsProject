@@ -20,6 +20,12 @@ doctrine:
                 dir: '%kernel.project_dir%/src/IdentityAccess/Infrastructure/Persistence/Doctrine/Entity'
                 prefix: 'App\IdentityAccess\Infrastructure\Persistence\Doctrine\Entity'
                 alias: IdentityAccessInfrastructure
+            DashboardInfrastructure:
+                type: attribute
+                is_bundle: false
+                dir: '%kernel.project_dir%/src/Dashboard/Infrastructure/Persistence/Doctrine/Entity'
+                prefix: 'App\Dashboard\Infrastructure\Persistence\Doctrine\Entity'
+                alias: DashboardInfrastructure
 
 when@test:
     doctrine:

@@ -48,6 +48,9 @@ services:
     App\Dashboard\UI\:
         resource: '../src/Dashboard/UI/'
 
+    App\Dashboard\Application\Port\DashboardRepository:
+        alias: App\Dashboard\Infrastructure\Repository\DoctrineDashboardRepository
+
     # FoodCatalog
     App\FoodCatalog\Application\:
         resource: '../src/FoodCatalog/Application/'

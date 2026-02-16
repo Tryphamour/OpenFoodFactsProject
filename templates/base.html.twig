@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Open Food Facts Dashboard{% endblock %}</title>
+    {% block importmap %}{{ importmap('app') }}{% endblock %}
 </head>
 <body>
 {% for message in app.flashes('auth_error') %}
@@ -13,4 +14,3 @@
 {% block body %}{% endblock %}
 </body>
 </html>
-
