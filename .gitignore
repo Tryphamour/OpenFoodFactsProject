@@ -11,3 +11,9 @@
 /vendor/
 /.phpunit.result.cache
 ###< symfony/framework-bundle ###
+
+# Local tooling / OS noise
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db
