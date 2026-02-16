@@ -33,21 +33,26 @@ Deliver authenticated user dashboard capabilities: widget add/remove/configure, 
    - SortableJS reorder posting to `POST /dashboard/reorder`
 5. Added route/controller update for persisted reorder.
 6. Added M3 domain/application tests; full suite remains green.
-7. Remaining:
-   - functional test coverage for dashboard interactions through HTTP boundary
-   - optional voter hardening if dashboard ownership model expands beyond current authenticated-owner scope
+7. Added functional dashboard journey tests:
+   - authenticated + 2FA-verified access to dashboard page
+   - reorder endpoint persistence behavior
+8. Hardened dashboard repository persistence:
+   - two-phase position update to avoid transient UNIQUE(owner_id, position) collisions during reorder swaps
+9. Stabilized functional test determinism:
+   - isolated sqlite database file for dashboard flow test
+   - unique test user id/email per test run
 
 ## Verification
 - Unit tests:
   - `tests/Dashboard/Domain/Model/DashboardTest.php` PASS
 - Application tests:
   - `tests/Dashboard/Application/UseCase/DashboardUseCasesTest.php` PASS
+- Functional tests:
+  - `tests/Dashboard/UI/DashboardFlowTest.php` PASS
 - Regression:
-  - full suite PASS (`21 tests, 68 assertions`)
+  - full suite PASS (`23 tests, 86 assertions`)
 - Routing:
   - dashboard routes + UX live route registered (`debug:router`)
-- Pending:
-  - full functional dashboard journey tests
 
 ## Acceptance Criteria
 - Users can manage widgets and reorder via drag/drop.
@@ -55,4 +60,4 @@ Deliver authenticated user dashboard capabilities: widget add/remove/configure, 
 - Unauthorized dashboard access/modification is denied.
 
 ## Review Notes
-M3 is in progress with domain/application/persistence/UI core implemented and validated by automated tests. Functional journey coverage is the next closure step.
+M3 is complete with domain/application/persistence/UI delivery, functional coverage on HTTP boundary, and stable automated verification.

@@ -1,7 +1,6 @@
 # TODO
 
 ## Active
-- [ ] M3 Dashboard Core (`tasks/runs/2026-02-16_m3-dashboard-core.md`)
 
 
 ## Backlog
@@ -11,5 +10,6 @@
 
 
 ## Done (latest 20)
+- [x] M3 Dashboard Core (`tasks/runs/2026-02-16_m3-dashboard-core.md`)
 - [x] M2 Security Core (`tasks/runs/2026-02-16_m2-security-core.md`)
 - [x] M1 Architecture Baseline (`tasks/runs/2026-02-16_m1-architecture-baseline.md`)

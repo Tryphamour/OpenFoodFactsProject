@@ -1,0 +1,4 @@
+framework:
+    rate_limiter:
+        identity_access_2fa_verify:
+            policy: no_limit

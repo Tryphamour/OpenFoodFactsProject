@@ -41,21 +41,40 @@ final readonly class DoctrineDashboardRepository implements DashboardRepository
 
     public function save(Dashboard $dashboard): void
     {
+        /** @var list<DashboardWidgetRecord> $existing */
         $existing = $this->entityManager->getRepository(DashboardWidgetRecord::class)
             ->findBy(['ownerId' => $dashboard->ownerId()]);
 
+        $existingById = [];
         foreach ($existing as $record) {
-            $this->entityManager->remove($record);
+            $existingById[$record->id] = $record;
         }
 
+        // Avoid transient UNIQUE(owner_id, position) collisions when widgets swap positions.
+        foreach (array_values($existing) as $index => $record) {
+            $record->position = 100000 + $index;
+        }
+        $this->entityManager->flush();
+
         foreach ($dashboard->widgets() as $widget) {
-            $this->entityManager->persist(new DashboardWidgetRecord(
+            $record = $existingById[$widget->id()] ?? new DashboardWidgetRecord(
                 id: $widget->id(),
                 ownerId: $dashboard->ownerId(),
                 type: $widget->type(),
                 position: $widget->position(),
                 configuration: $widget->configuration(),
-            ));
+            );
+
+            $record->type = $widget->type();
+            $record->position = $widget->position();
+            $record->configuration = $widget->configuration();
+
+            $this->entityManager->persist($record);
+            unset($existingById[$widget->id()]);
+        }
+
+        foreach ($existingById as $obsolete) {
+            $this->entityManager->remove($obsolete);
         }
 
         $this->entityManager->flush();
