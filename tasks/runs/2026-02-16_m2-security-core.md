@@ -53,13 +53,16 @@ Implement robust authentication with password + email 2FA, account lock policy, 
   - implementation added
   - tests now green
 - Current test status:
-  - `13 tests, 27 assertions` PASS (`vendor/bin/simple-phpunit`)
+  - `15 tests, 48 assertions` PASS (`vendor/bin/simple-phpunit`)
 - Symfony bootstrap:
   - `php bin/console debug:router` PASS in Docker (routes registered for login/2fa/dashboard)
   - `php bin/console about` PASS in Docker with `DATABASE_URL` set
-- Pending verification:
-  - migration execution and full flow against running PostgreSQL service
-  - functional auth journey tests
+- Functional/UI verification:
+  - end-to-end login + 2FA verification flow covered by `tests/IdentityAccess/UI/SecurityFlowTest.php`
+  - lock behavior after 5 failed attempts covered by `tests/IdentityAccess/UI/SecurityFlowTest.php`
+- Migration verification:
+  - migration executed against running PostgreSQL container:
+    - `doctrine:migrations:migrate --no-interaction` -> PASS
 
 ## Acceptance Criteria
 - Account locks after 5 failed attempts with configurable duration.
@@ -67,4 +70,4 @@ Implement robust authentication with password + email 2FA, account lock policy, 
 - Lock/unlock and 2FA critical transitions are auditable.
 
 ## Review Notes
-M2 is in progress. Domain model, runtime integration, and Doctrine persistence adapters are in place; migration execution against live PostgreSQL and full functional auth tests are still required before closure.
+M2 accepted. Security core now includes domain invariants, Symfony runtime flow, Doctrine persistence, brute-force controls, and functional verification.

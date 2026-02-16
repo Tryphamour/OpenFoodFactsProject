@@ -1,0 +1,5 @@
+services:
+    App\IdentityAccess\Application\Port\SecondFactorCodeGenerator:
+        class: App\IdentityAccess\Infrastructure\Security\StaticSecondFactorCodeGenerator
+        arguments:
+            $code: '111111'

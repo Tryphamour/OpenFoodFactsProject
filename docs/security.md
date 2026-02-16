@@ -55,10 +55,10 @@ Must demonstrate events, voters, attributes where relevant.
   - lock event emission on transition
   - unlock event emission
 
-### Remaining M2 Steps
+### M2 Validation Status
 
-- Add functional tests for end-to-end login + 2FA + lock scenarios.
-- Validate migrations against running PostgreSQL service in Docker end-to-end flow.
+- Functional tests cover end-to-end login + 2FA success flow and lock behavior after failed attempts.
+- Doctrine migration has been executed successfully against a running PostgreSQL container in Docker.
 
 ## Symfony Runtime Integration (Implemented)
 

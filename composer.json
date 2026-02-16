@@ -74,6 +74,8 @@
         }
     },
     "require-dev": {
+        "symfony/browser-kit": "8.0.*",
+        "symfony/css-selector": "8.0.*",
         "symfony/phpunit-bridge": "^8.0"
     }
 }
