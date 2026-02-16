@@ -15,16 +15,32 @@ Establish the project skeleton and decision boundaries for a staff-level Symfony
 - Missing architectural documentation leading to drift.
 
 ## Implementation Steps
-1. Scaffold namespace/module structure reflecting bounded contexts.
-2. Add contracts/ports in Domain/Application where external dependencies are needed.
-3. Introduce baseline conventions for handlers, repositories, and component placement.
-4. Update `docs/architecture.md` with concrete folder and dependency rules.
-5. Validate that no infrastructure code appears in Domain.
+1. Scaffolded Symfony 8 baseline in Docker (`composer:2 create-project symfony/skeleton:^8.0`), then merged it into repository root.
+2. Created bounded context structure:
+   - `src/IdentityAccess/{Domain,Application,Infrastructure,UI}`
+   - `src/Dashboard/{Domain,Application,Infrastructure,UI}`
+   - `src/FoodCatalog/{Domain,Application,Infrastructure,UI}`
+   - `src/Audit/{Domain,Application,Infrastructure,UI}`
+   - `src/Shared/{Domain,Application,Infrastructure,UI}`
+3. Added baseline contracts/ports:
+   - `src/FoodCatalog/Application/Port/ProductCatalogGateway.php`
+   - `src/FoodCatalog/Application/Port/ProductSearchQuery.php`
+   - `src/IdentityAccess/Application/Port/SecondFactorCodeSender.php`
+   - `src/Audit/Application/Port/AuditTrail.php`
+   - `src/Dashboard/Application/Port/DashboardRepository.php`
+   - shared abstractions in `src/Shared/*`
+4. Restricted service registration in `config/services.yaml` to `Application`, `Infrastructure`, and `UI` namespaces by context (domain excluded by convention).
+5. Updated `docs/architecture.md` with explicit dependency rules and added `docs/review-checklist.md` for review discipline.
+6. Fixed a bootstrap issue detected during verification by creating missing `src/Shared/UI/`.
 
 ## Verification
-- Static inspection confirms one-way dependencies (UI -> Application -> Domain, Infrastructure plugged via ports).
-- Architecture checklist completed and stored in run notes.
-- Initial test bootstrap runs in Docker test container.
+- Symfony bootstrap check in Docker:
+  - `docker run --rm -v "${PWD}:/app" -w /app composer:2 php bin/console about` -> PASS
+- PHP syntax lint in Docker:
+  - `docker run --rm -v "${PWD}:/app" -w /app composer:2 sh -lc "find src -name '*.php' -print0 | xargs -0 -n1 php -l"` -> PASS
+- Static structure check:
+  - service container registration excludes domain namespaces by path selection.
+  - only ports/contracts exist in application at this stage; no business rules in UI.
 
 ## Acceptance Criteria
 - DDD folder/module structure is committed and documented.
@@ -32,4 +48,4 @@ Establish the project skeleton and decision boundaries for a staff-level Symfony
 - No business rule appears in controller/form/live component classes.
 
 ## Review Notes
-Pending implementation.
+M1 accepted. The architecture baseline is now executable, documented, and constrained enough for staff-level review to evaluate layering decisions before business implementation starts.

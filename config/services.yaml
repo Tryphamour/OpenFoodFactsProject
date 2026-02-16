@@ -1,0 +1,68 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+
+# This file is the entry point to configure your own services.
+# Files in the packages/ subdirectory configure your dependencies.
+# See also https://symfony.com/doc/current/service_container/import.html
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+
+services:
+    # default configuration for services in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    # Shared
+    App\Shared\Application\:
+        resource: '../src/Shared/Application/'
+
+    App\Shared\Infrastructure\:
+        resource: '../src/Shared/Infrastructure/'
+
+    App\Shared\UI\:
+        resource: '../src/Shared/UI/'
+
+    # IdentityAccess
+    App\IdentityAccess\Application\:
+        resource: '../src/IdentityAccess/Application/'
+
+    App\IdentityAccess\Infrastructure\:
+        resource: '../src/IdentityAccess/Infrastructure/'
+
+    App\IdentityAccess\UI\:
+        resource: '../src/IdentityAccess/UI/'
+
+    # Dashboard
+    App\Dashboard\Application\:
+        resource: '../src/Dashboard/Application/'
+
+    App\Dashboard\Infrastructure\:
+        resource: '../src/Dashboard/Infrastructure/'
+
+    App\Dashboard\UI\:
+        resource: '../src/Dashboard/UI/'
+
+    # FoodCatalog
+    App\FoodCatalog\Application\:
+        resource: '../src/FoodCatalog/Application/'
+
+    App\FoodCatalog\Infrastructure\:
+        resource: '../src/FoodCatalog/Infrastructure/'
+
+    App\FoodCatalog\UI\:
+        resource: '../src/FoodCatalog/UI/'
+
+    # Audit
+    App\Audit\Application\:
+        resource: '../src/Audit/Application/'
+
+    App\Audit\Infrastructure\:
+        resource: '../src/Audit/Infrastructure/'
+
+    App\Audit\UI\:
+        resource: '../src/Audit/UI/'
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

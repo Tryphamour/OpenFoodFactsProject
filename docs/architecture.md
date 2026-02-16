@@ -1,29 +1,68 @@
 # Architecture
 
-The project must follow strict DDD separation:
+This project uses DDD + layered architecture with explicit bounded contexts.
 
-- Domain
-    - Entities
-    - Value Objects
-    - Domain Services
-    - Domain Events
-    - Business rules
-- Application
-    - Use Cases
-    - DTOs
-    - Application Services
-- Infrastructure
-    - Doctrine Repositories
-    - Email provider
-    - Open Food Facts client
-    - Security persistence
-- UI
-    - Controllers
-    - Live Components
-    - Forms
-    - Twig templates
+## Bounded Contexts
 
-No anemic domain model.
-Business rules must live in Domain.
+- `IdentityAccess`: authentication, account lock state, 2FA lifecycle.
+- `Dashboard`: widget lifecycle and layout persistence rules.
+- `FoodCatalog`: product query language and Open Food Facts access contract.
+- `Audit`: traceability of security and operational events.
+- `Shared`: cross-cutting contracts and technical primitives.
 
-TDD required for domain logic.
+## Physical Structure
+
+Each bounded context follows the same layer split:
+
+- `Domain`: entities, value objects, domain services, domain events, invariants.
+- `Application`: use cases, DTOs, ports (interfaces to infrastructure).
+- `Infrastructure`: adapters (Doctrine, HTTP clients, mail, persistence).
+- `UI`: controllers, forms, live components, templates integration.
+
+Root namespace structure:
+
+- `src/IdentityAccess/{Domain,Application,Infrastructure,UI}`
+- `src/Dashboard/{Domain,Application,Infrastructure,UI}`
+- `src/FoodCatalog/{Domain,Application,Infrastructure,UI}`
+- `src/Audit/{Domain,Application,Infrastructure,UI}`
+- `src/Shared/{Domain,Application,Infrastructure,UI}`
+
+## Dependency Rules (Mandatory)
+
+Allowed dependencies:
+
+- `UI -> Application`
+- `Application -> Domain`
+- `Infrastructure -> Application + Domain`
+- `Domain -> Domain (same context) + Shared\Domain`
+
+Forbidden dependencies:
+
+- `Domain -> Infrastructure`
+- `Domain -> UI`
+- `Application -> UI`
+- Cross-context direct infrastructure coupling (use application ports/contracts)
+
+## Symfony Container Policy
+
+Service autowiring is intentionally limited to:
+
+- `*/Application`
+- `*/Infrastructure`
+- `*/UI`
+
+`Domain` classes are not auto-registered as container services by convention to keep domain purity and explicit composition.
+
+## Design Constraints
+
+- No anemic domain model: business rules and invariants are implemented in domain methods/value objects.
+- No business logic in controllers, forms, or live components.
+- External APIs (Open Food Facts) are accessed only through infrastructure adapters behind application ports.
+- Security and authorization orchestration uses Symfony Security in UI/Application, with rules enforced by domain/application policies.
+
+## Testing Policy
+
+- TDD is mandatory for domain logic.
+- Domain tests verify invariants and business behavior.
+- Integration tests verify adapters and persistence contracts.
+- Functional tests verify end-to-end use-case behavior through HTTP/UI boundaries.

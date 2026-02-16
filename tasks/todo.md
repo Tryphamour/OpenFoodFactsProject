@@ -1,7 +1,6 @@
 # TODO
 
 ## Active
-- [ ] M1 Architecture Baseline (`tasks/runs/2026-02-16_m1-architecture-baseline.md`)
 - [ ] M2 Security Core (`tasks/runs/2026-02-16_m2-security-core.md`)
 
 
@@ -13,3 +12,4 @@
 
 
 ## Done (latest 20)
+- [x] M1 Architecture Baseline (`tasks/runs/2026-02-16_m1-architecture-baseline.md`)
