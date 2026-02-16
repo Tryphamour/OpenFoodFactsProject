@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Two-factor verification{% endblock %}
+
+{% block body %}
+    <h1>Two-factor verification</h1>
+    <p>Check your mailbox for the verification code.</p>
+    <form method="post" action="{{ path('identity_access_2fa') }}">
+        <label for="code">Verification code</label>
+        <input id="code" type="text" name="code" minlength="6" maxlength="6" required>
+        <button type="submit">Verify</button>
+    </form>
+{% endblock %}
+

@@ -7,5 +7,10 @@
 # To list all registered routes, run the following command:
 #   bin/console debug:router
 
-controllers:
-    resource: routing.controllers
+identity_access_ui:
+    resource: ../src/IdentityAccess/UI/Controller/
+    type: attribute
+
+dashboard_ui:
+    resource: ../src/Dashboard/UI/Controller/
+    type: attribute

@@ -1,0 +1,6 @@
+framework:
+    rate_limiter:
+        identity_access_2fa_verify:
+            policy: sliding_window
+            limit: 5
+            interval: '10 minutes'

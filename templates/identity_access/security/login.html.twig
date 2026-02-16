@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+    <h1>Sign in</h1>
+    <p>Demo account: admin@example.com / Admin1234!</p>
+    <form method="post" action="{{ path('identity_access_login') }}">
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" required value="{{ last_email }}">
+
+        <label for="password">Password</label>
+        <input id="password" type="password" name="password" required>
+
+        <button type="submit">Continue</button>
+    </form>
+{% endblock %}
+

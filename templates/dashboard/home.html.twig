@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+    <h1>Dashboard</h1>
+    <p>Authenticated and 2FA-verified session.</p>
+    <a href="{{ path('identity_access_logout') }}">Logout</a>
+{% endblock %}

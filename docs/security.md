@@ -57,7 +57,33 @@ Must demonstrate events, voters, attributes where relevant.
 
 ### Remaining M2 Steps
 
-- Integrate Symfony firewall/authenticator flow with this domain model.
-- Persist user security state, 2FA challenges, and audit events in PostgreSQL.
-- Add rate-limiters for login + 2FA endpoints.
+- Replace temporary in-memory security persistence with PostgreSQL persistence:
+  - security user state
+  - 2FA challenges
+  - audit trail records
 - Add functional tests for end-to-end login + 2FA + lock scenarios.
+
+## Symfony Runtime Integration (Implemented)
+
+- Custom login authenticator:
+  - `App\IdentityAccess\UI\Security\LoginFormAuthenticator`
+- 2FA gate enforcement on authenticated sessions:
+  - `App\IdentityAccess\UI\Security\TwoFactorEnforcementSubscriber`
+- UI endpoints:
+  - `/login`
+  - `/2fa`
+  - `/logout`
+  - `/dashboard` (requires authenticated + 2FA-verified session)
+- Brute-force protections:
+  - login throttling in security firewall
+  - dedicated rate limiter for 2FA verification
+
+## Temporary M2 Tradeoff
+
+To validate flow quickly and keep DDD boundaries stable, current runtime adapters are in-memory:
+
+- `InMemorySecurityUserRepository`
+- `InMemorySecondFactorChallengeRepository`
+- `InMemoryIdentityStore`
+
+These adapters are intentionally transitional and will be replaced by PostgreSQL-backed infrastructure before M2 closure.

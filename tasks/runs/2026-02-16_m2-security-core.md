@@ -30,10 +30,14 @@ Implement robust authentication with password + email 2FA, account lock policy, 
    - repository/audit/policy provider ports
 4. Documented architecture/security decisions in `docs/security.md`.
 5. Remaining:
-   - Symfony authenticator + 2FA flow wiring
    - PostgreSQL persistence for user security state / challenges / audit
-   - endpoint-level brute-force controls
    - functional tests for full auth journey
+6. Implemented Symfony runtime integration:
+   - login authenticator (`LoginFormAuthenticator`)
+   - 2FA verification endpoint/controller
+   - route protection and 2FA enforcement subscriber
+   - login throttling + dedicated 2FA rate limiter
+7. Implemented temporary in-memory infrastructure adapters to validate end-to-end flow before DB migration.
 
 ## Verification
 - TDD cycle completed for domain model:
@@ -41,11 +45,11 @@ Implement robust authentication with password + email 2FA, account lock policy, 
   - implementation added
   - tests now green
 - Current test status:
-  - `12 tests, 23 assertions` PASS (`vendor/bin/simple-phpunit`)
+  - `13 tests, 27 assertions` PASS (`vendor/bin/simple-phpunit`)
 - Symfony bootstrap:
-  - `php bin/console about` PASS in Docker
+  - `php bin/console debug:router` PASS in Docker (routes registered for login/2fa/dashboard)
 - Pending verification:
-  - integration/functional coverage once Symfony Security + persistence are wired
+  - integration/functional coverage once PostgreSQL persistence is wired
 
 ## Acceptance Criteria
 - Account locks after 5 failed attempts with configurable duration.
@@ -53,4 +57,4 @@ Implement robust authentication with password + email 2FA, account lock policy, 
 - Lock/unlock and 2FA critical transitions are auditable.
 
 ## Review Notes
-M2 is in progress. Core domain and application orchestration are implemented and validated by tests; framework integration and persistence still required before marking M2 complete.
+M2 is in progress. Domain model and Symfony runtime integration are in place and tested; PostgreSQL-backed persistence and full functional auth tests are still required before closure.
