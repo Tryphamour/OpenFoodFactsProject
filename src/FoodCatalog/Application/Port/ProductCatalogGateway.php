@@ -6,9 +6,5 @@ namespace App\FoodCatalog\Application\Port;
 
 interface ProductCatalogGateway
 {
-    /**
-     * @return list<array<string, mixed>>
-     */
-    public function search(ProductSearchQuery $query): array;
+    public function search(ProductSearchQuery $query): ProductSearchResult;
 }
-

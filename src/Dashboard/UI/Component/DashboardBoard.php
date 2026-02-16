@@ -12,6 +12,8 @@ use App\Dashboard\Application\UseCase\GetDashboard\GetDashboardHandler;
 use App\Dashboard\Application\UseCase\GetDashboard\GetDashboardQuery;
 use App\Dashboard\Application\UseCase\RemoveWidget\RemoveWidgetCommand;
 use App\Dashboard\Application\UseCase\RemoveWidget\RemoveWidgetHandler;
+use App\FoodCatalog\Application\Port\ProductSearchQuery;
+use App\FoodCatalog\Application\UseCase\SearchProducts\SearchProductsHandler;
 use App\IdentityAccess\Infrastructure\Security\AppUser;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -30,23 +32,64 @@ final class DashboardBoard
         private readonly AddWidgetHandler $addWidget,
         private readonly RemoveWidgetHandler $removeWidget,
         private readonly ConfigureWidgetHandler $configureWidget,
+        private readonly SearchProductsHandler $searchProducts,
     ) {
     }
 
     /**
-     * @return list<array{id: string, type: string, position: int, configuration: array<string, scalar>}>
+     * @return list<array{
+     *     id: string,
+     *     type: string,
+     *     position: int,
+     *     configuration: array<string, scalar>,
+     *     preview: list<array{name: string, brand: ?string, nutriScore: ?string}>,
+     *     degraded: bool,
+     *     degradationReason: ?string
+     * }>
      */
     public function widgets(): array
     {
         $dashboard = $this->getDashboard->handle(new GetDashboardQuery($this->currentUserId()));
 
         return array_map(
-            static fn ($widget): array => [
-                'id' => $widget->id(),
-                'type' => $widget->type(),
-                'position' => $widget->position(),
-                'configuration' => $widget->configuration(),
-            ],
+            function ($widget): array {
+                $preview = [];
+                $degraded = false;
+                $degradationReason = null;
+
+                if ($widget->type() === 'product_search') {
+                    $query = (string) ($widget->configuration()['query'] ?? '');
+                    if ($query !== '') {
+                        $searchResult = $this->searchProducts->handle(new ProductSearchQuery(
+                            term: $query,
+                            page: 1,
+                            limit: 5,
+                            sortBy: 'name_asc',
+                        ));
+
+                        $preview = array_map(
+                            static fn ($product): array => [
+                                'name' => $product->name,
+                                'brand' => $product->brand,
+                                'nutriScore' => $product->nutriScore,
+                            ],
+                            $searchResult->products,
+                        );
+                        $degraded = $searchResult->degraded;
+                        $degradationReason = $searchResult->degradationReason;
+                    }
+                }
+
+                return [
+                    'id' => $widget->id(),
+                    'type' => $widget->type(),
+                    'position' => $widget->position(),
+                    'configuration' => $widget->configuration(),
+                    'preview' => $preview,
+                    'degraded' => $degraded,
+                    'degradationReason' => $degradationReason,
+                ];
+            },
             $dashboard->widgets(),
         );
     }

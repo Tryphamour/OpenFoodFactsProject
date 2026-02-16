@@ -67,6 +67,7 @@ Service autowiring is intentionally limited to:
 - No business logic in controllers, forms, or live components.
 - External APIs (Open Food Facts) are accessed only through infrastructure adapters behind application ports.
 - Security and authorization orchestration uses Symfony Security in UI/Application, with rules enforced by domain/application policies.
+- External API adapters must expose explicit degraded outcomes (instead of throwing to UI) so dashboards/controllers can fail gracefully.
 
 ## Testing Policy
 

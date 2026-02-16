@@ -1,5 +1,12 @@
 services:
-    App\IdentityAccess\Application\Port\SecondFactorCodeGenerator:
-        class: App\IdentityAccess\Infrastructure\Security\StaticSecondFactorCodeGenerator
+    App\Tests\Fixtures\FoodCatalog\DegradedProductCatalogGateway: ~
+
+    App\FoodCatalog\Application\Port\ProductCatalogGateway:
+        alias: App\Tests\Fixtures\FoodCatalog\DegradedProductCatalogGateway
+
+    App\IdentityAccess\Infrastructure\Security\StaticSecondFactorCodeGenerator:
         arguments:
             $code: '111111'
+
+    App\IdentityAccess\Application\Port\SecondFactorCodeGenerator:
+        alias: App\IdentityAccess\Infrastructure\Security\StaticSecondFactorCodeGenerator

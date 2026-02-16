@@ -11,6 +11,10 @@ parameters:
     identity_access.lock.duration: 'PT15M'
     identity_access.second_factor.ttl: 'PT10M'
     identity_access.second_factor.max_attempts: 5
+    openfoodfacts.base_uri: 'https://world.openfoodfacts.org'
+    openfoodfacts.timeout_seconds: 4
+    openfoodfacts.cache_ttl_seconds: 300
+    openfoodfacts.stale_cache_ttl_seconds: 3600
 
 services:
     # default configuration for services in *this* file
@@ -60,6 +64,16 @@ services:
 
     App\FoodCatalog\UI\:
         resource: '../src/FoodCatalog/UI/'
+
+    App\FoodCatalog\Application\Port\ProductCatalogGateway:
+        alias: App\FoodCatalog\Infrastructure\Api\OpenFoodFactsProductCatalogGateway
+
+    App\FoodCatalog\Infrastructure\Api\OpenFoodFactsProductCatalogGateway:
+        arguments:
+            $baseUri: '%openfoodfacts.base_uri%'
+            $timeoutSeconds: '%openfoodfacts.timeout_seconds%'
+            $cacheTtlSeconds: '%openfoodfacts.cache_ttl_seconds%'
+            $staleCacheTtlSeconds: '%openfoodfacts.stale_cache_ttl_seconds%'
 
     # Audit
     App\Audit\Application\:

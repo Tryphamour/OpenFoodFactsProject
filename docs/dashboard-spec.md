@@ -61,3 +61,8 @@ No frontend framework allowed.
 - Route for persisted drag-and-drop order:
   - `POST /dashboard/reorder`
 - SortableJS integrated on dashboard widget list.
+
+## M4 Dashboard Integration Notes
+
+- `product_search` widgets now call FoodCatalog application use case and display a preview list of products.
+- Widget preview gracefully degrades when Open Food Facts is unavailable (degradation reason displayed, page remains functional).

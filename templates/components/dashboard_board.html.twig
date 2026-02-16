@@ -27,6 +27,25 @@
                     </button>
                     <button data-action="live#action" data-live-action-param="removeWidget" data-live-widgetId-param="{{ widget.id }}">Remove</button>
                 </div>
+
+                {% if widget.type == 'product_search' and widget.configuration.query is defined and widget.configuration.query is not empty %}
+                    <div style="margin-top: 10px; background: #f9fafb; border: 1px solid #e5e7eb; padding: 8px;">
+                        <p style="margin: 0 0 6px 0; font-size: 0.9rem;">
+                            Results for "{{ widget.configuration.query }}"
+                            {% if widget.degraded %}
+                                <span style="color: #b45309;">(degraded: {{ widget.degradationReason }})</span>
+                            {% endif %}
+                        </p>
+
+                        <ul style="margin: 0; padding-left: 18px;">
+                            {% for product in widget.preview %}
+                                <li>{{ product.name }}{% if product.brand %} - {{ product.brand }}{% endif %}{% if product.nutriScore %} (NutriScore: {{ product.nutriScore|upper }}){% endif %}</li>
+                            {% else %}
+                                <li>No products found.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
             </li>
         {% else %}
             <li>No widget yet.</li>

@@ -80,6 +80,23 @@ final class DashboardFlowTest extends WebTestCase
         self::assertSame('widget-1', $records[1]->id);
     }
 
+    public function testDashboardStillRendersWhenCatalogGatewayIsDegraded(): void
+    {
+        $this->entityManager->persist(new DashboardWidgetRecord(
+            id: 'widget-1',
+            ownerId: $this->userId,
+            type: 'product_search',
+            position: 0,
+            configuration: ['query' => 'milk'],
+        ));
+        $this->entityManager->flush();
+
+        $this->authenticateThrough2fa();
+
+        self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('section', 'degraded: off_unavailable');
+    }
+
     private function authenticateThrough2fa(): void
     {
         $this->client->request('POST', '/login', [
