@@ -75,6 +75,18 @@ Must demonstrate events, voters, attributes where relevant.
   - login throttling in security firewall
   - dedicated rate limiter for 2FA verification
 
+## M5 Internal API Security Model
+
+- Protected internal route space:
+  - `^/internal/api` requires `ROLE_USER` in `access_control`
+- Authorization policy:
+  - `DashboardOwnerVoter` authorizes dashboard read if requester is:
+    - dashboard owner, or
+    - `ROLE_ADMIN`
+- Error exposure:
+  - Internal API failures are normalized as `application/problem+json`
+  - Traceable `traceId` included in payload and logged server-side
+
 ## PostgreSQL Persistence Integration (Implemented)
 
 The following ports now use Doctrine-backed adapters:

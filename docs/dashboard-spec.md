@@ -66,3 +66,17 @@ No frontend framework allowed.
 
 - `product_search` widgets now call FoodCatalog application use case and display a preview list of products.
 - Widget preview gracefully degrades when Open Food Facts is unavailable (degradation reason displayed, page remains functional).
+
+## M5 Internal API Notes
+
+- Internal endpoint:
+  - `GET /internal/api/dashboard/{ownerId}`
+- Response contract:
+  - JSON body: `{ "data": { "ownerId": string, "widgets": [...] } }`
+  - Widget shape: `id`, `type`, `position`, `configuration`
+- Authorization:
+  - Requires authenticated + 2FA-verified session (`ROLE_USER`)
+  - Ownership enforced through voter; `ROLE_ADMIN` can read any owner dashboard.
+- Error contract:
+  - `/internal/api/*` failures return `application/problem+json`
+  - Payload fields: `type`, `title`, `status`, `detail`, `instance`, `traceId`
