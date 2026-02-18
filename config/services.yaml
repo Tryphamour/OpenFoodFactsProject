@@ -12,7 +12,7 @@ parameters:
     identity_access.second_factor.ttl: 'PT10M'
     identity_access.second_factor.max_attempts: 5
     openfoodfacts.base_uri: 'https://world.openfoodfacts.org'
-    openfoodfacts.timeout_seconds: 4
+    openfoodfacts.timeout_seconds: 15
     openfoodfacts.cache_ttl_seconds: 300
     openfoodfacts.stale_cache_ttl_seconds: 3600
 

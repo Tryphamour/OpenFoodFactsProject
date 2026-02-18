@@ -32,6 +32,8 @@ up:
 
 demo-up:
 	$(DEMO_COMPOSE) up -d --build
+	$(DEMO_COMPOSE) exec -T $(APP) php bin/console asset-map:compile --no-debug
+	$(DEMO_COMPOSE) exec -T $(APP) php bin/console cache:warmup --env=prod
 
 down:
 	$(COMPOSE) down
