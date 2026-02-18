@@ -31,6 +31,7 @@ Use the provided `Makefile` for day-to-day actions:
 
 - `make help`
 - `make up`
+- `make demo-up`
 - `make install`
 - `make migrate`
 - `make test`
@@ -39,6 +40,8 @@ Use the provided `Makefile` for day-to-day actions:
 - `make about`
 - `make smoke`
 - `make mailhog-url`
+- `make demo-smoke`
+- `make demo-mailhog-url`
 
 Equivalent raw `docker compose ...` commands remain valid and are shown where useful.
 
@@ -74,6 +77,27 @@ make mailhog-url
 ```
 
 Then open `http://<returned-host:port>` in your browser.
+
+## Demo / Evaluation Mode (Recommended)
+
+For smoother runtime during evaluation on Docker Desktop, use the dedicated demo profile:
+
+```bash
+make demo-up
+make install
+make migrate
+make demo-smoke
+```
+
+Then open:
+
+- App: `http://localhost/login`
+- Mailhog: use `make demo-mailhog-url`, then open `http://localhost:<port>`
+
+Notes:
+
+- Demo profile runs with `APP_ENV=prod`, `APP_DEBUG=0` and stricter OPcache settings.
+- It keeps the same services and data model, but reduces dev overhead that can cause slow first requests on Windows-mounted volumes.
 
 ## Default Credentials
 

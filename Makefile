@@ -1,14 +1,16 @@
 COMPOSE ?= docker compose
 APP ?= frankenphp
 MAIL ?= mailhog
+DEMO_COMPOSE ?= docker compose -f compose.yaml -f compose.override.yaml -f compose.demo.yaml
 
 DEFAULT_FILE ?= tests/Dashboard/UI/InternalDashboardApiTest.php
 
-.PHONY: help up down down-v ps logs install migrate about test test-default test-file mailhog-url smoke
+.PHONY: help up demo-up down down-v ps logs install migrate about test test-default test-file mailhog-url smoke demo-about demo-smoke demo-mailhog-url
 
 help:
 	@echo Available targets:
 	@echo   make up                Start or rebuild containers
+	@echo   make demo-up           Start optimized demo profile (prod-like)
 	@echo   make down              Stop containers
 	@echo   make down-v            Stop containers and remove volumes (destructive)
 	@echo   make ps                Show container status
@@ -21,9 +23,15 @@ help:
 	@echo   make test-file FILE=... Run specific test file
 	@echo   make mailhog-url       Print Mailhog host:port
 	@echo   make smoke             Quick runtime smoke checks \(ps + about\)
+	@echo   make demo-about        Symfony diagnostics in demo profile
+	@echo   make demo-smoke        Quick runtime smoke checks in demo profile
+	@echo   make demo-mailhog-url  Print Mailhog host:port in demo profile
 
 up:
 	$(COMPOSE) up -d --build
+
+demo-up:
+	$(DEMO_COMPOSE) up -d --build
 
 down:
 	$(COMPOSE) down
@@ -62,3 +70,13 @@ mailhog-url:
 	$(COMPOSE) port $(MAIL) 8025
 
 smoke: ps about
+
+demo-about:
+	$(DEMO_COMPOSE) exec -T $(APP) php bin/console about
+
+demo-smoke:
+	$(DEMO_COMPOSE) ps
+	$(DEMO_COMPOSE) exec -T $(APP) php bin/console about
+
+demo-mailhog-url:
+	$(DEMO_COMPOSE) port $(MAIL) 8025

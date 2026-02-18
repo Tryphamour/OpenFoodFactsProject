@@ -16,7 +16,7 @@ services:
       SERVER_NAME: ${SERVER_NAME:-:80}
     volumes:
       - ./:/app
-      - ./docker/FrankenPHP/conf.d/symfony.dev.ini:/usr/local/etc/php/conf.d/symfony.dev.ini:ro
+      - ./docker/FrankenPHP/conf.d/${SYMFONY_INI_FILE:-symfony.dev.ini}:/usr/local/etc/php/conf.d/symfony.app.ini:ro
     ports:
       - "80:80"
 

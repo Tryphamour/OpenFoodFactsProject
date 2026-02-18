@@ -1,0 +1,6 @@
+services:
+  frankenphp:
+    environment:
+      APP_ENV: prod
+      APP_DEBUG: 0
+      SYMFONY_INI_FILE: symfony.prod.ini
