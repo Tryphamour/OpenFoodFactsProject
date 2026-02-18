@@ -1,5 +1,25 @@
-
 services:
+  frankenphp:
+    build:
+      context: .
+      dockerfile: docker/FrankenPHP/Dockerfile
+    depends_on:
+      database:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    environment:
+      APP_ENV: ${APP_ENV:-dev}
+      APP_SECRET: ${APP_SECRET:-change-me}
+      DATABASE_URL: postgresql://app:app@database:5432/openfoodfacts?serverVersion=16&charset=utf8
+      MAILER_DSN: smtp://mailhog:1025
+      SERVER_NAME: ${SERVER_NAME:-:80}
+    volumes:
+      - ./:/app
+      - ./docker/FrankenPHP/conf.d/symfony.dev.ini:/usr/local/etc/php/conf.d/symfony.dev.ini:ro
+    ports:
+      - "80:80"
+
 ###> doctrine/doctrine-bundle ###
   database:
     image: postgres:${POSTGRES_VERSION:-16}-alpine
@@ -14,8 +34,9 @@ services:
       start_period: 60s
     volumes:
       - database_data:/var/lib/postgresql/data:rw
-      # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
-      # - ./docker/db/data:/var/lib/postgresql/data:rw
+
+  mailhog:
+    image: mailhog/mailhog
 ###< doctrine/doctrine-bundle ###
 
 volumes:
