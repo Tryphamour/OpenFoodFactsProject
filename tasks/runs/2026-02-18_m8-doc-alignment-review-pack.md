@@ -14,22 +14,27 @@ Align high-level planning documents with the delivered M1..M6 execution and prov
 - Missing explicit statement of out-of-scope items.
 
 ## Implementation Steps
-1. Update `docs/roadmap.md` to reflect current milestone structure/status.
-2. Add `docs/release-checklist.md` (or equivalent) with:
+1. Update `docs/roadmap.md` to reflect current milestone structure/status. ✅
+2. Add `docs/release-checklist.md` (or equivalent) with: ✅
    - Runtime readiness checks
    - Test evidence
    - Security and architecture verification points
-3. Add `docs/reviewer-guide.md` summarizing:
+3. Add `docs/reviewer-guide.md` summarizing: ✅
    - Key flows to verify manually
    - Internal API contract
    - Degraded OFF behavior expectations
-4. Document explicit out-of-scope/future improvements section.
-5. Cross-link all new docs from README and existing spec docs.
+4. Document explicit out-of-scope/future improvements section. ✅
+5. Cross-link all new docs from README and existing spec docs. ✅
 
 ## Verification
 - Consistency pass across `docs/*.md` and `tasks/runs/*.md`.
 - Confirm all references point to existing files and current commands.
 - Quick reviewer dry-run using only the review pack.
+
+Performed checks:
+- `rg` consistency scan on `README.md`, `docs/*`, `tasks/todo.md`, and this run file ✅
+- Presence check for new docs under `docs/` (`roadmap.md`, `release-checklist.md`, `reviewer-guide.md`) ✅
+- Cross-link check from `README.md` to new review docs ✅
 
 ## Acceptance Criteria
 - No major documentation contradictions remain.
@@ -37,4 +42,4 @@ Align high-level planning documents with the delivered M1..M6 execution and prov
 - Tradeoffs and scope boundaries are explicit.
 
 ## Review Notes
-Pending implementation.
+M8 accepted. Documentation is now aligned with delivered milestones and includes reviewer/release-oriented guidance.

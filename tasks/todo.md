@@ -3,11 +3,11 @@
 ## Active
 
 ## Backlog
-- [ ] M8 Documentation Alignment and Review Pack (`tasks/runs/2026-02-18_m8-doc-alignment-review-pack.md`)
-- [ ] M9 Developer Experience Command Surface (`tasks/runs/2026-02-18_m9-devx-command-surface.md`)
 
 
 ## Done (latest 20)
+- [x] M9 Developer Experience Command Surface (`tasks/runs/2026-02-18_m9-devx-command-surface.md`)
+- [x] M8 Documentation Alignment and Review Pack (`tasks/runs/2026-02-18_m8-doc-alignment-review-pack.md`)
 - [x] M7 Onboarding README Completion (`tasks/runs/2026-02-18_m7-onboarding-readme.md`)
 - [x] M6 Hardening and Delivery Readiness (`tasks/runs/2026-02-16_m6-hardening-readiness.md`)
 - [x] M5 Internal Secured API (`tasks/runs/2026-02-16_m5-internal-api.md`)

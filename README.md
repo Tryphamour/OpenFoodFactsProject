@@ -29,12 +29,15 @@ No local PHP installation is required for normal use.
 
 Use the provided `Makefile` for day-to-day actions:
 
+- `make help`
 - `make up`
 - `make install`
 - `make migrate`
 - `make test`
+- `make test-default`
 - `make ps`
 - `make about`
+- `make smoke`
 - `make mailhog-url`
 
 Equivalent raw `docker compose ...` commands remain valid and are shown where useful.
@@ -133,6 +136,12 @@ Stream app logs:
 make logs
 ```
 
+Show available command targets:
+
+```bash
+make help
+```
+
 ## Internal API (Implemented)
 
 - Endpoint: `GET /internal/api/dashboard/{ownerId}`
@@ -160,6 +169,9 @@ make logs
 - `docs/security.md`
 - `docs/dashboard-spec.md`
 - `docs/openfoodfacts-integration.md`
+- `docs/roadmap.md`
+- `docs/release-checklist.md`
+- `docs/reviewer-guide.md`
 - `tasks/todo.md`
 
 ## Troubleshooting
