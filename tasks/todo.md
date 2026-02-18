@@ -3,10 +3,10 @@
 ## Active
 
 ## Backlog
-- [ ] M6 Hardening and Delivery Readiness (`tasks/runs/2026-02-16_m6-hardening-readiness.md`)
 
 
 ## Done (latest 20)
+- [x] M6 Hardening and Delivery Readiness (`tasks/runs/2026-02-16_m6-hardening-readiness.md`)
 - [x] M5 Internal Secured API (`tasks/runs/2026-02-16_m5-internal-api.md`)
 - [x] M4 Open Food Facts Integration (`tasks/runs/2026-02-16_m4-openfoodfacts-integration.md`)
 - [x] M3 Dashboard Core (`tasks/runs/2026-02-16_m3-dashboard-core.md`)

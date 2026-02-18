@@ -75,3 +75,14 @@ Service autowiring is intentionally limited to:
 - Domain tests verify invariants and business behavior.
 - Integration tests verify adapters and persistence contracts.
 - Functional tests verify end-to-end use-case behavior through HTTP/UI boundaries.
+
+## M6 Delivery Readiness Notes
+
+- Docker runtime is now fully reproducible from repository sources:
+  - `docker compose up -d --build`
+  - services: `frankenphp`, `database`, `mailhog`
+- `frankenphp` image is defined in `docker/FrankenPHP/Dockerfile` (no hidden local image dependency).
+- Local dev PHP config and Caddy config are versioned:
+  - `docker/FrankenPHP/conf.d/symfony.dev.ini`
+  - `docker/FrankenPHP/Caddyfile`
+- Full test suite is expected to run in container with `APP_ENV=test`.

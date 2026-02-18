@@ -87,6 +87,12 @@ Must demonstrate events, voters, attributes where relevant.
   - Internal API failures are normalized as `application/problem+json`
   - Traceable `traceId` included in payload and logged server-side
 
+## M6 Operational Security Notes
+
+- Docker default mail transport in local runtime targets `mailhog` for non-production 2FA email inspection.
+- Test execution in container must force `APP_ENV=test` to preserve Symfony test-container guarantees.
+- Runtime secrets remain environment-driven; `.env.example` reflects safe local defaults only.
+
 ## PostgreSQL Persistence Integration (Implemented)
 
 The following ports now use Doctrine-backed adapters:

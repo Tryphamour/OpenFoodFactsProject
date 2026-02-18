@@ -80,3 +80,8 @@ No frontend framework allowed.
 - Error contract:
   - `/internal/api/*` failures return `application/problem+json`
   - Payload fields: `type`, `title`, `status`, `detail`, `instance`, `traceId`
+
+## M6 Stability Notes
+
+- Dashboard behavior remains stable in full containerized test execution.
+- Existing dashboard UI flow tests remain green after Docker hardening changes.
