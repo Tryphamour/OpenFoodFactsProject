@@ -41,6 +41,7 @@ final class DashboardFlowTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', 'Dashboard');
         self::assertSelectorTextContains('h2', 'Widgets');
+        self::assertSelectorExists('section[data-controller~="live"]');
     }
 
     public function testReorderEndpointPersistsNewWidgetOrder(): void
