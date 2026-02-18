@@ -63,8 +63,14 @@ final class DashboardFlowTest extends WebTestCase
         $this->entityManager->flush();
 
         $this->authenticateThrough2fa();
+        $reorderToken = (string) $this->client
+            ->getCrawler()
+            ->filter('form[action="/dashboard/reorder"] input[name="_token"]')
+            ->first()
+            ->attr('value');
 
         $this->client->request('POST', '/dashboard/reorder', [
+            '_token' => $reorderToken,
             'ordered_ids' => 'widget-2,widget-1',
         ]);
 
@@ -96,6 +102,70 @@ final class DashboardFlowTest extends WebTestCase
 
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('section', 'degraded: off_unavailable');
+        self::assertSelectorExists('form[action="/dashboard/widget/widget-1/configure"]');
+    }
+
+    public function testAddWidgetEndpointPersistsWidgetWithoutManualReorder(): void
+    {
+        $this->authenticateThrough2fa();
+        $addToken = (string) $this->client
+            ->getCrawler()
+            ->filter('form[action="/dashboard/widget/add"] input[name="_token"]')
+            ->first()
+            ->attr('value');
+
+        $this->client->request('POST', '/dashboard/widget/add', [
+            'type' => 'additives_overview',
+            '_token' => $addToken,
+        ]);
+
+        self::assertResponseRedirects('/dashboard');
+        $this->client->followRedirect();
+        self::assertResponseIsSuccessful();
+
+        /** @var list<DashboardWidgetRecord> $records */
+        $records = $this->entityManager
+            ->getRepository(DashboardWidgetRecord::class)
+            ->findBy(['ownerId' => $this->userId], ['position' => 'ASC']);
+
+        self::assertCount(1, $records);
+        self::assertSame('additives_overview', $records[0]->type);
+    }
+
+    public function testConfigureWidgetEndpointPersistsQuery(): void
+    {
+        $this->entityManager->persist(new DashboardWidgetRecord(
+            id: 'widget-1',
+            ownerId: $this->userId,
+            type: 'product_search',
+            position: 0,
+            configuration: [],
+        ));
+        $this->entityManager->flush();
+
+        $this->authenticateThrough2fa();
+        $configureToken = (string) $this->client
+            ->getCrawler()
+            ->filter('form[action="/dashboard/widget/widget-1/configure"] input[name="_token"]')
+            ->first()
+            ->attr('value');
+
+        $this->client->request('POST', '/dashboard/widget/widget-1/configure', [
+            'query' => 'food',
+            '_token' => $configureToken,
+        ]);
+
+        self::assertResponseRedirects('/dashboard');
+        $this->client->followRedirect();
+        self::assertResponseIsSuccessful();
+
+        /** @var DashboardWidgetRecord|null $record */
+        $record = $this->entityManager
+            ->getRepository(DashboardWidgetRecord::class)
+            ->findOneBy(['ownerId' => $this->userId, 'id' => 'widget-1']);
+
+        self::assertNotNull($record);
+        self::assertSame(['query' => 'food'], $record->configuration);
     }
 
     private function authenticateThrough2fa(): void

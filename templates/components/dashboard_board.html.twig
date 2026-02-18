@@ -2,9 +2,21 @@
     <h2>Widgets</h2>
 
     <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-        <button data-action="live#action" data-live-action-param="addWidget" data-live-type-param="product_search">Add product search</button>
-        <button data-action="live#action" data-live-action-param="addWidget" data-live-type-param="nutriscore_distribution">Add NutriScore distribution</button>
-        <button data-action="live#action" data-live-action-param="addWidget" data-live-type-param="additives_overview">Add additives overview</button>
+        <form method="post" action="{{ path('dashboard_widget_add') }}">
+            <input type="hidden" name="type" value="product_search">
+            <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_add') }}">
+            <button type="submit">Add product search</button>
+        </form>
+        <form method="post" action="{{ path('dashboard_widget_add') }}">
+            <input type="hidden" name="type" value="nutriscore_distribution">
+            <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_add') }}">
+            <button type="submit">Add NutriScore distribution</button>
+        </form>
+        <form method="post" action="{{ path('dashboard_widget_add') }}">
+            <input type="hidden" name="type" value="additives_overview">
+            <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_add') }}">
+            <button type="submit">Add additives overview</button>
+        </form>
     </div>
 
     <p style="font-size: 0.9rem;">Drag and drop to reorder, then click "Save order".</p>
@@ -15,17 +27,15 @@
                 <strong>{{ widget.type }}</strong> (#{{ widget.position }})
 
                 <div style="margin-top: 8px;">
-                    <input id="query-{{ widget.id }}" type="text" placeholder="query" value="{{ widget.configuration.query|default('') }}">
-                    <button
-                        data-action="live#action"
-                        data-live-action-param="configureWidget"
-                        data-live-widgetId-param="{{ widget.id }}"
-                        data-live-query-param=""
-                        onclick="this.dataset.liveQueryParam = document.getElementById('query-{{ widget.id }}').value;"
-                    >
-                        Save config
-                    </button>
-                    <button data-action="live#action" data-live-action-param="removeWidget" data-live-widgetId-param="{{ widget.id }}">Remove</button>
+                    <form method="post" action="{{ path('dashboard_widget_configure', { widgetId: widget.id }) }}" style="display: inline-flex; gap: 8px;">
+                        <input name="query" id="query-{{ widget.id }}" type="text" placeholder="query" value="{{ widget.configuration.query|default('') }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_configure_' ~ widget.id) }}">
+                        <button type="submit">Save config</button>
+                    </form>
+                    <form method="post" action="{{ path('dashboard_widget_remove', { widgetId: widget.id }) }}" style="display: inline-block; margin-left: 8px;">
+                        <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_remove_' ~ widget.id) }}">
+                        <button type="submit">Remove</button>
+                    </form>
                 </div>
 
                 {% if widget.type == 'product_search' and widget.configuration.query is defined and widget.configuration.query is not empty %}
@@ -53,6 +63,7 @@
     </ul>
 
     <form id="dashboard-reorder-form" method="post" action="{{ path('dashboard_reorder') }}">
+        <input type="hidden" name="_token" value="{{ csrf_token('dashboard_reorder') }}">
         <input type="hidden" name="ordered_ids" id="dashboard-ordered-ids" value="">
         <button type="submit">Save order</button>
     </form>
