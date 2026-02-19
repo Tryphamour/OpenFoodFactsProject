@@ -7,3 +7,4 @@ This file stores prevention rules after failures or corrections.
 - When running PHPUnit inside Docker, force `APP_ENV=test` (for example `docker compose exec -T -e APP_ENV=test frankenphp php vendor/bin/simple-phpunit`) so `WebTestCase` gets `test.service_container`.
 - When `APP_ENV=test` runs with `debug=false`, clear test cache after adding routes/services to avoid stale container metadata (`docker compose exec -T -e APP_ENV=test frankenphp php bin/console cache:clear`).
 - In demo/prod profile, clear cache before warmup after Twig/UI changes (`php bin/console cache:clear --env=prod --no-debug`) to avoid stale rendered dashboard actions.
+- When running with compose demo overrides, use the same compose file set for status checks (for example `docker compose -f compose.yaml -f compose.override.yaml -f compose.demo.yaml ps`) to avoid misleading empty `docker compose ps` output.

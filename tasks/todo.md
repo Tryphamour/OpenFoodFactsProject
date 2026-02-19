@@ -6,6 +6,7 @@
 
 
 ## Done (latest 20)
+- [x] M13 Final hardening and finition (`tasks/runs/2026-02-19_m13-final-hardening-finition.md`)
 - [x] M12 CSS extraction and template cleanup (`tasks/runs/2026-02-19_m12-css-extraction-template-cleanup.md`)
 - [x] M11 UI polish (simple dark theme) (`tasks/runs/2026-02-19_m11-ui-polish-dark-simple.md`)
 - [x] M10-bis Dashboard UI visibility + demo cache consistency (`tasks/runs/2026-02-19_m10bis-dashboard-visibility-cache-fix.md`)
