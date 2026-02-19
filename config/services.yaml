@@ -112,5 +112,11 @@ services:
     App\IdentityAccess\Application\Port\SecurityAuditTrail:
         alias: App\IdentityAccess\Infrastructure\Security\DoctrineSecurityAuditTrail
 
+    App\IdentityAccess\Application\Port\UserAccountProvisioningGateway:
+        alias: App\IdentityAccess\Infrastructure\Repository\DoctrineUserAccountProvisioningGateway
+
+    App\IdentityAccess\Application\Port\UserPasswordHasher:
+        alias: App\IdentityAccess\Infrastructure\Security\SymfonyUserPasswordHasher
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

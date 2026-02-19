@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create User{% endblock %}
+
+{% block body %}
+    <h1>Create user account</h1>
+    <p>Admin-only interface for account provisioning.</p>
+
+    <form method="post" action="{{ path('identity_access_admin_user_new') }}" style="display: grid; gap: 10px; max-width: 420px;">
+        <label for="email">Email</label>
+        <input id="email" type="email" name="email" value="{{ form_data.email }}" required>
+
+        <label for="password">Temporary password</label>
+        <input id="password" type="password" name="password" minlength="10" required>
+
+        <label>
+            <input type="checkbox" name="is_admin" value="1" {% if form_data.is_admin %}checked{% endif %}>
+            Grant admin role
+        </label>
+
+        <input type="hidden" name="_token" value="{{ csrf_token('admin_user_create') }}">
+        <button type="submit">Create account</button>
+    </form>
+
+    <p style="margin-top: 14px;"><a href="{{ path('dashboard_home') }}">Back to dashboard</a></p>
+{% endblock %}
+

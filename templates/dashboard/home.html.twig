@@ -5,6 +5,9 @@
 {% block body %}
     <h1>Dashboard</h1>
     <p>Authenticated and 2FA-verified session.</p>
+    {% if is_granted('ROLE_ADMIN') %}
+        <p><a href="{{ path('identity_access_admin_user_new') }}">Admin: create user account</a></p>
+    {% endif %}
     {{ component('dashboard_board') }}
     <a href="{{ path('identity_access_logout') }}">Logout</a>
 {% endblock %}
