@@ -1,7 +1,10 @@
-<section {{ attributes }}>
-    <h2>Widgets</h2>
+<section {{ attributes.defaults({ class: 'card' }) }}>
+    <div class="row row-between">
+        <h2 class="section-title">Widgets</h2>
+        <span class="pill">Open Food Facts</span>
+    </div>
 
-    <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+    <div class="row row-mt">
         <form method="post" action="{{ path('dashboard_widget_add') }}">
             <input type="hidden" name="type" value="product_search">
             <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_add') }}">
@@ -19,27 +22,33 @@
         </form>
     </div>
 
-    <p style="font-size: 0.9rem;">Drag and drop to reorder, then click "Save order".</p>
+    <p class="lead">Drag and drop widgets, then click "Save order".</p>
 
-    <ul id="dashboard-widgets-list" style="list-style: none; padding: 0;">
+    <ul id="dashboard-widgets-list" class="widget-list">
         {% for widget in this.widgets %}
-            <li data-widget-id="{{ widget.id }}" style="border: 1px solid #ccc; margin: 8px 0; padding: 10px;">
-                <strong>{{ widget.type }}</strong> (#{{ widget.position }})
+            <li data-widget-id="{{ widget.id }}" class="card card-compact">
+                <div class="row row-between">
+                    <strong>{{ widget.type }}</strong>
+                    <span class="pill">#{{ widget.position }}</span>
+                </div>
 
-                <div style="margin-top: 8px;">
-                    <form method="post" action="{{ path('dashboard_widget_configure', { widgetId: widget.id }) }}" style="display: inline-flex; gap: 8px;">
-                        <label for="config-{{ widget.id }}">{{ widget.configField.label }}</label>
-                        <input
-                            name="{{ widget.configField.name }}"
-                            id="config-{{ widget.id }}"
-                            type="text"
-                            placeholder="{{ widget.configField.placeholder }}"
-                            value="{{ attribute(widget.configuration, widget.configField.name)|default('') }}"
-                        >
+                <div class="row row-end space-top">
+                    <form method="post" action="{{ path('dashboard_widget_configure', { widgetId: widget.id }) }}" class="row form-grow">
+                        <div class="stack stack-tight field-grow">
+                            <label for="config-{{ widget.id }}">{{ widget.configField.label }}</label>
+                            <input
+                                name="{{ widget.configField.name }}"
+                                id="config-{{ widget.id }}"
+                                type="text"
+                                placeholder="{{ widget.configField.placeholder }}"
+                                value="{{ attribute(widget.configuration, widget.configField.name)|default('') }}"
+                            >
+                        </div>
                         <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_configure_' ~ widget.id) }}">
                         <button type="submit">Save config</button>
                     </form>
-                    <form method="post" action="{{ path('dashboard_widget_remove', { widgetId: widget.id }) }}" style="display: inline-block; margin-left: 8px;">
+
+                    <form method="post" action="{{ path('dashboard_widget_remove', { widgetId: widget.id }) }}">
                         <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_remove_' ~ widget.id) }}">
                         <button type="submit">Remove</button>
                     </form>
@@ -48,8 +57,8 @@
                 {% set hasPreviewConfig = (widget.type == 'brand_search' and widget.configuration.brand is defined and widget.configuration.brand is not empty)
                     or (widget.type != 'brand_search' and widget.configuration.query is defined and widget.configuration.query is not empty) %}
                 {% if hasPreviewConfig %}
-                    <div style="margin-top: 10px; background: #f9fafb; border: 1px solid #e5e7eb; padding: 8px;">
-                        <p style="margin: 0 0 6px 0; font-size: 0.9rem;">
+                    <div class="card card-subtle">
+                        <p class="lead lead-tight">
                             {% if widget.type == 'brand_search' %}
                                 Brand results for "{{ widget.configuration.brand }}"
                             {% elseif widget.type == 'nutriscore_a_search' %}
@@ -58,11 +67,11 @@
                                 Results for "{{ widget.configuration.query }}"
                             {% endif %}
                             {% if widget.degraded %}
-                                <span style="color: #b45309;">(degraded: {{ widget.degradationReason }})</span>
+                                <span class="degraded-note">(degraded: {{ widget.degradationReason }})</span>
                             {% endif %}
                         </p>
 
-                        <ul style="margin: 0; padding-left: 18px;">
+                        <ul class="results-list">
                             {% for product in widget.preview %}
                                 <li>{{ product.name }}{% if product.brand %} - {{ product.brand }}{% endif %}{% if product.nutriScore %} (NutriScore: {{ product.nutriScore|upper }}){% endif %}</li>
                             {% else %}
@@ -73,11 +82,11 @@
                 {% endif %}
             </li>
         {% else %}
-            <li>No widget yet.</li>
+            <li class="card">No widget yet.</li>
         {% endfor %}
     </ul>
 
-    <form id="dashboard-reorder-form" method="post" action="{{ path('dashboard_reorder') }}">
+    <form id="dashboard-reorder-form" method="post" action="{{ path('dashboard_reorder') }}" class="row space-top">
         <input type="hidden" name="_token" value="{{ csrf_token('dashboard_reorder') }}">
         <input type="hidden" name="ordered_ids" id="dashboard-ordered-ids" value="">
         <button type="submit">Save order</button>

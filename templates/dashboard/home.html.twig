@@ -3,16 +3,28 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block body %}
-    <h1>Dashboard</h1>
-    <p>Authenticated and 2FA-verified session.</p>
-    <section style="margin: 10px 0; padding: 10px; border: 1px solid #d1d5db; background: #f9fafb;">
-        <strong>Administration</strong>
+    <header class="space-top">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="lead">Authenticated and 2FA-verified session.</p>
+    </header>
+
+    <section class="card">
+        <div class="row row-between">
+            <strong>Administration</strong>
+            <span class="pill">Security</span>
+        </div>
         {% if is_granted('ROLE_ADMIN') %}
-            <p style="margin: 6px 0 0 0;"><a href="{{ path('identity_access_admin_user_new') }}">Create user account</a></p>
+            <p class="lead lead-tight">
+                <a href="{{ path('identity_access_admin_user_new') }}">Create user account</a>
+            </p>
         {% else %}
-            <p style="margin: 6px 0 0 0; color: #6b7280;">User creation page: `/admin/users/new` (ROLE_ADMIN required).</p>
+            <p class="lead lead-tight">User creation page: <code>/admin/users/new</code> (ROLE_ADMIN required).</p>
         {% endif %}
     </section>
-    {{ component('dashboard_board') }}
-    <a href="{{ path('identity_access_logout') }}">Logout</a>
+
+    <div class="space-top">
+        {{ component('dashboard_board') }}
+    </div>
+
+    <p class="space-top"><a href="{{ path('identity_access_logout') }}">Logout</a></p>
 {% endblock %}

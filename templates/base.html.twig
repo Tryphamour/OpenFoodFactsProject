@@ -7,13 +7,15 @@
     {% block importmap %}{{ importmap('app') }}{% endblock %}
 </head>
 <body>
-{% for message in app.flashes('auth_error') %}
-    <p style="color: #b00020;">{{ message }}</p>
-{% endfor %}
-{% for message in app.flashes('auth_success') %}
-    <p style="color: #0f766e;">{{ message }}</p>
-{% endfor %}
+<main class="app-shell">
+    {% for message in app.flashes('auth_error') %}
+        <div class="flash flash-error">{{ message }}</div>
+    {% endfor %}
+    {% for message in app.flashes('auth_success') %}
+        <div class="flash flash-success">{{ message }}</div>
+    {% endfor %}
 
-{% block body %}{% endblock %}
+    {% block body %}{% endblock %}
+</main>
 </body>
 </html>

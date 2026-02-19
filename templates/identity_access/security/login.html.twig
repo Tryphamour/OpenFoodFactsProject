@@ -3,16 +3,25 @@
 {% block title %}Login{% endblock %}
 
 {% block body %}
-    <h1>Sign in</h1>
-    <p>Demo account: admin@example.com / Admin1234!</p>
-    <form method="post" action="{{ path('identity_access_login') }}">
-        <label for="email">Email</label>
-        <input id="email" type="email" name="email" required value="{{ last_email }}">
+    <section class="card auth-card">
+        <span class="pill">Identity Access</span>
+        <h1 class="page-title">Sign in</h1>
+        <p class="lead">Demo account: <strong>admin@example.com</strong> / <strong>Admin1234!</strong></p>
 
-        <label for="password">Password</label>
-        <input id="password" type="password" name="password" required>
+        <form method="post" action="{{ path('identity_access_login') }}" class="stack">
+            <div class="stack stack-tight">
+                <label for="email">Email</label>
+                <input id="email" type="email" name="email" required value="{{ last_email }}">
+            </div>
 
-        <button type="submit">Continue</button>
-    </form>
+            <div class="stack stack-tight">
+                <label for="password">Password</label>
+                <input id="password" type="password" name="password" required>
+            </div>
+
+            <div class="row">
+                <button type="submit">Continue</button>
+            </div>
+        </form>
+    </section>
 {% endblock %}
-

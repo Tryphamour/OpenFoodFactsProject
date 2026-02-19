@@ -6,6 +6,8 @@
 
 
 ## Done (latest 20)
+- [x] M12 CSS extraction and template cleanup (`tasks/runs/2026-02-19_m12-css-extraction-template-cleanup.md`)
+- [x] M11 UI polish (simple dark theme) (`tasks/runs/2026-02-19_m11-ui-polish-dark-simple.md`)
 - [x] M10-bis Dashboard UI visibility + demo cache consistency (`tasks/runs/2026-02-19_m10bis-dashboard-visibility-cache-fix.md`)
 - [x] Admin user creation UI + functional widget refresh (`tasks/runs/2026-02-19_admin-user-creation-and-widget-refresh.md`)
 - [x] M9 Developer Experience Command Surface (`tasks/runs/2026-02-18_m9-devx-command-surface.md`)
