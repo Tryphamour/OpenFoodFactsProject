@@ -29,15 +29,15 @@ final class DashboardTest extends TestCase
 
         $this->expectException(\DomainException::class);
 
-        $dashboard->addWidget(Widget::create('widget-1', 'nutriscore_distribution'));
+        $dashboard->addWidget(Widget::create('widget-1', 'brand_search'));
     }
 
     public function testRemoveWidgetReordersRemainingWidgets(): void
     {
         $dashboard = Dashboard::createForOwner('user-1');
         $dashboard->addWidget(Widget::create('widget-1', 'product_search'));
-        $dashboard->addWidget(Widget::create('widget-2', 'nutriscore_distribution'));
-        $dashboard->addWidget(Widget::create('widget-3', 'additives_overview'));
+        $dashboard->addWidget(Widget::create('widget-2', 'brand_search'));
+        $dashboard->addWidget(Widget::create('widget-3', 'nutriscore_a_search'));
 
         $dashboard->removeWidget('widget-2');
 
@@ -52,8 +52,8 @@ final class DashboardTest extends TestCase
     {
         $dashboard = Dashboard::createForOwner('user-1');
         $dashboard->addWidget(Widget::create('widget-1', 'product_search'));
-        $dashboard->addWidget(Widget::create('widget-2', 'nutriscore_distribution'));
-        $dashboard->addWidget(Widget::create('widget-3', 'additives_overview'));
+        $dashboard->addWidget(Widget::create('widget-2', 'brand_search'));
+        $dashboard->addWidget(Widget::create('widget-3', 'nutriscore_a_search'));
 
         $dashboard->moveWidget('widget-1', 2);
 
@@ -75,4 +75,3 @@ final class DashboardTest extends TestCase
         self::assertSame(['query' => 'bread', 'sort' => 'name'], $dashboard->widgets()[0]->configuration());
     }
 }
-

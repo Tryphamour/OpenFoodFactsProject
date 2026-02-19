@@ -8,14 +8,14 @@
             <button type="submit">Add product search</button>
         </form>
         <form method="post" action="{{ path('dashboard_widget_add') }}">
-            <input type="hidden" name="type" value="nutriscore_distribution">
+            <input type="hidden" name="type" value="brand_search">
             <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_add') }}">
-            <button type="submit">Add NutriScore distribution</button>
+            <button type="submit">Add brand search</button>
         </form>
         <form method="post" action="{{ path('dashboard_widget_add') }}">
-            <input type="hidden" name="type" value="additives_overview">
+            <input type="hidden" name="type" value="nutriscore_a_search">
             <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_add') }}">
-            <button type="submit">Add additives overview</button>
+            <button type="submit">Add NutriScore A finder</button>
         </form>
     </div>
 
@@ -28,7 +28,14 @@
 
                 <div style="margin-top: 8px;">
                     <form method="post" action="{{ path('dashboard_widget_configure', { widgetId: widget.id }) }}" style="display: inline-flex; gap: 8px;">
-                        <input name="query" id="query-{{ widget.id }}" type="text" placeholder="query" value="{{ widget.configuration.query|default('') }}">
+                        <label for="config-{{ widget.id }}">{{ widget.configField.label }}</label>
+                        <input
+                            name="{{ widget.configField.name }}"
+                            id="config-{{ widget.id }}"
+                            type="text"
+                            placeholder="{{ widget.configField.placeholder }}"
+                            value="{{ attribute(widget.configuration, widget.configField.name)|default('') }}"
+                        >
                         <input type="hidden" name="_token" value="{{ csrf_token('dashboard_widget_configure_' ~ widget.id) }}">
                         <button type="submit">Save config</button>
                     </form>
@@ -38,10 +45,18 @@
                     </form>
                 </div>
 
-                {% if widget.type == 'product_search' and widget.configuration.query is defined and widget.configuration.query is not empty %}
+                {% set hasPreviewConfig = (widget.type == 'brand_search' and widget.configuration.brand is defined and widget.configuration.brand is not empty)
+                    or (widget.type != 'brand_search' and widget.configuration.query is defined and widget.configuration.query is not empty) %}
+                {% if hasPreviewConfig %}
                     <div style="margin-top: 10px; background: #f9fafb; border: 1px solid #e5e7eb; padding: 8px;">
                         <p style="margin: 0 0 6px 0; font-size: 0.9rem;">
-                            Results for "{{ widget.configuration.query }}"
+                            {% if widget.type == 'brand_search' %}
+                                Brand results for "{{ widget.configuration.brand }}"
+                            {% elseif widget.type == 'nutriscore_a_search' %}
+                                NutriScore A results for "{{ widget.configuration.query }}"
+                            {% else %}
+                                Results for "{{ widget.configuration.query }}"
+                            {% endif %}
                             {% if widget.degraded %}
                                 <span style="color: #b45309;">(degraded: {{ widget.degradationReason }})</span>
                             {% endif %}

@@ -144,7 +144,7 @@ final class InternalDashboardApiTest extends WebTestCase
         $this->entityManager->persist(new DashboardWidgetRecord(
             id: 'widget-2',
             ownerId: $this->ownerUserId,
-            type: 'nutriscore_distribution',
+            type: 'brand_search',
             position: 1,
             configuration: [],
         ));

@@ -24,8 +24,8 @@ final class DashboardController extends AbstractController
 {
     private const array ALLOWED_WIDGET_TYPES = [
         'product_search',
-        'nutriscore_distribution',
-        'additives_overview',
+        'brand_search',
+        'nutriscore_a_search',
     ];
 
     #[Route('/', name: 'app_home', methods: ['GET'])]
@@ -147,7 +147,14 @@ final class DashboardController extends AbstractController
         }
 
         $query = trim((string) $request->request->get('query', ''));
-        $configuration = $query !== '' ? ['query' => $query] : [];
+        $brand = trim((string) $request->request->get('brand', ''));
+        $configuration = [];
+        if ($query !== '') {
+            $configuration['query'] = $query;
+        }
+        if ($brand !== '') {
+            $configuration['brand'] = $brand;
+        }
 
         $configureWidget->handle(new ConfigureWidgetCommand(
             ownerId: $user->id(),

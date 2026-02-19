@@ -56,7 +56,7 @@ final class DashboardFlowTest extends WebTestCase
         $this->entityManager->persist(new DashboardWidgetRecord(
             id: 'widget-2',
             ownerId: $this->userId,
-            type: 'nutriscore_distribution',
+            type: 'brand_search',
             position: 1,
             configuration: [],
         ));
@@ -115,7 +115,7 @@ final class DashboardFlowTest extends WebTestCase
             ->attr('value');
 
         $this->client->request('POST', '/dashboard/widget/add', [
-            'type' => 'additives_overview',
+            'type' => 'nutriscore_a_search',
             '_token' => $addToken,
         ]);
 
@@ -129,7 +129,7 @@ final class DashboardFlowTest extends WebTestCase
             ->findBy(['ownerId' => $this->userId], ['position' => 'ASC']);
 
         self::assertCount(1, $records);
-        self::assertSame('additives_overview', $records[0]->type);
+        self::assertSame('nutriscore_a_search', $records[0]->type);
     }
 
     public function testConfigureWidgetEndpointPersistsQuery(): void

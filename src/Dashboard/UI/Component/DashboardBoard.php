@@ -42,6 +42,7 @@ final class DashboardBoard
      *     type: string,
      *     position: int,
      *     configuration: array<string, scalar>,
+     *     configField: array{name: string, label: string, placeholder: string},
      *     preview: list<array{name: string, brand: ?string, nutriScore: ?string}>,
      *     degraded: bool,
      *     degradationReason: ?string
@@ -57,34 +58,30 @@ final class DashboardBoard
                 $degraded = false;
                 $degradationReason = null;
 
-                if ($widget->type() === 'product_search') {
-                    $query = (string) ($widget->configuration()['query'] ?? '');
-                    if ($query !== '') {
-                        $searchResult = $this->searchProducts->handle(new ProductSearchQuery(
-                            term: $query,
-                            page: 1,
-                            limit: 5,
-                            sortBy: 'name_asc',
-                        ));
-
-                        $preview = array_map(
-                            static fn ($product): array => [
-                                'name' => $product->name,
-                                'brand' => $product->brand,
-                                'nutriScore' => $product->nutriScore,
-                            ],
-                            $searchResult->products,
-                        );
-                        $degraded = $searchResult->degraded;
-                        $degradationReason = $searchResult->degradationReason;
-                    }
+                $type = $widget->type();
+                $configuration = $widget->configuration();
+                $configField = $this->configFieldForType($type);
+                $searchQuery = $this->buildSearchQueryForWidget($type, $configuration);
+                if ($searchQuery !== null) {
+                    $searchResult = $this->searchProducts->handle($searchQuery);
+                    $preview = array_map(
+                        static fn ($product): array => [
+                            'name' => $product->name,
+                            'brand' => $product->brand,
+                            'nutriScore' => $product->nutriScore,
+                        ],
+                        $searchResult->products,
+                    );
+                    $degraded = $searchResult->degraded;
+                    $degradationReason = $searchResult->degradationReason;
                 }
 
                 return [
                     'id' => $widget->id(),
-                    'type' => $widget->type(),
+                    'type' => $type,
                     'position' => $widget->position(),
-                    'configuration' => $widget->configuration(),
+                    'configuration' => $configuration,
+                    'configField' => $configField,
                     'preview' => $preview,
                     'degraded' => $degraded,
                     'degradationReason' => $degradationReason,
@@ -135,5 +132,76 @@ final class DashboardBoard
         }
 
         return $user->id();
+    }
+
+    /**
+     * @param array<string, scalar> $configuration
+     */
+    private function buildSearchQueryForWidget(string $type, array $configuration): ?ProductSearchQuery
+    {
+        if ($type === 'product_search') {
+            $query = trim((string) ($configuration['query'] ?? ''));
+            if ($query === '') {
+                return null;
+            }
+
+            return new ProductSearchQuery(term: $query, page: 1, limit: 5, sortBy: 'name_asc');
+        }
+
+        if ($type === 'brand_search') {
+            $brand = trim((string) ($configuration['brand'] ?? ''));
+            if ($brand === '') {
+                return null;
+            }
+
+            return new ProductSearchQuery(
+                term: $brand,
+                page: 1,
+                limit: 5,
+                filters: ['brand' => $brand],
+                sortBy: 'name_asc',
+            );
+        }
+
+        if ($type === 'nutriscore_a_search') {
+            $query = trim((string) ($configuration['query'] ?? ''));
+            if ($query === '') {
+                return null;
+            }
+
+            return new ProductSearchQuery(
+                term: $query,
+                page: 1,
+                limit: 5,
+                filters: ['nutriscore' => 'a'],
+                sortBy: 'name_asc',
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * @return array{name: string, label: string, placeholder: string}
+     */
+    private function configFieldForType(string $type): array
+    {
+        return match ($type) {
+            'brand_search' => [
+                'name' => 'brand',
+                'label' => 'Brand',
+                'placeholder' => 'e.g. Danone',
+            ],
+            'nutriscore_a_search' => [
+                'name' => 'query',
+                'label' => 'Search term',
+                'placeholder' => 'e.g. cereal',
+            ],
+            default => [
+                'name' => 'query',
+                'label' => 'Search term',
+                'placeholder' => 'e.g. chocolate',
+            ],
+        };
     }
 }

@@ -30,7 +30,7 @@ final class DashboardUseCasesTest extends TestCase
         $get = new GetDashboardHandler($repo);
 
         $add->handle(new AddWidgetCommand('user-1', 'product_search', ['query' => 'milk']));
-        $add->handle(new AddWidgetCommand('user-1', 'nutriscore_distribution'));
+        $add->handle(new AddWidgetCommand('user-1', 'brand_search'));
 
         $dashboard = $get->handle(new GetDashboardQuery('user-1'));
         self::assertCount(2, $dashboard->widgets());
