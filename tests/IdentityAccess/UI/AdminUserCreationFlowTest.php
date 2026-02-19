@@ -33,6 +33,7 @@ final class AdminUserCreationFlowTest extends WebTestCase
     public function testAdminCanCreateUserFromAdminInterface(): void
     {
         $this->authenticateThrough2fa('admin@example.com');
+        self::assertSelectorTextContains('body', 'Create user account');
 
         $this->client->request('GET', '/admin/users/new');
         self::assertResponseIsSuccessful();
@@ -114,4 +115,3 @@ final class AdminUserCreationFlowTest extends WebTestCase
         $this->entityManager->clear();
     }
 }
-

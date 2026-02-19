@@ -41,6 +41,9 @@ final class DashboardFlowTest extends WebTestCase
         self::assertResponseIsSuccessful();
         self::assertSelectorTextContains('h1', 'Dashboard');
         self::assertSelectorTextContains('h2', 'Widgets');
+        self::assertSelectorTextContains('body', 'Add brand search');
+        self::assertSelectorTextContains('body', 'Add NutriScore A finder');
+        self::assertSelectorTextContains('body', 'Administration');
         self::assertSelectorExists('section[data-controller~="live"]');
     }
 
@@ -101,7 +104,7 @@ final class DashboardFlowTest extends WebTestCase
         $this->authenticateThrough2fa();
 
         self::assertResponseIsSuccessful();
-        self::assertSelectorTextContains('section', 'degraded: off_unavailable');
+        self::assertSelectorTextContains('body', 'degraded: off_unavailable');
         self::assertSelectorExists('form[action="/dashboard/widget/widget-1/configure"]');
     }
 
