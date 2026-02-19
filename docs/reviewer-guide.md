@@ -25,7 +25,9 @@ Access:
 3. Open dashboard and verify widget board renders.
 4. Add/configure/reorder widgets and refresh page to confirm persistence.
 5. Verify product search widget returns data.
-6. Temporarily degrade catalog gateway in test scenario and confirm graceful degraded rendering behavior.
+6. Verify `brand_search` and `nutriscore_a_search` widgets return relevant previews after configuration.
+7. Temporarily degrade catalog gateway in test scenario and confirm graceful degraded rendering behavior.
+8. As admin, open `/admin/users/new` and create a new account.
 
 ## 3) Internal API Contract Checks
 

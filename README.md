@@ -5,9 +5,10 @@ Production-oriented Symfony 8 technical project using DDD boundaries, secure aut
 ## What This Project Does
 
 - Authenticated dashboard with per-user widget layout.
-- Product search widgets backed by Open Food Facts.
+- Functional widgets backed by Open Food Facts (`product_search`, `brand_search`, `nutriscore_a_search`).
 - Graceful degraded mode when Open Food Facts is unavailable.
 - Internal secured API for dashboard data access.
+- Admin-only account creation interface (`/admin/users/new`).
 - Docker-first runtime (`frankenphp`, `postgres`, `mailhog`).
 
 ## Tech Stack

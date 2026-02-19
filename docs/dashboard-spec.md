@@ -10,10 +10,8 @@ Each user can:
 
 Widgets examples:
 - Product search widget
-- Nutritional breakdown
-- Additives overview
-- NutriScore distribution
-- Category stats
+- Brand search widget
+- NutriScore A finder widget
 
 Dashboard configuration must be stored in database.
 
@@ -85,3 +83,11 @@ No frontend framework allowed.
 
 - Dashboard behavior remains stable in full containerized test execution.
 - Existing dashboard UI flow tests remain green after Docker hardening changes.
+
+## M10 Widget Refresh Notes
+
+- Placeholder widgets were replaced with functional widgets:
+  - `brand_search`: search and preview products for a specific brand input.
+  - `nutriscore_a_search`: preview products for a term filtered to NutriScore `A`.
+- Widget configuration form now adapts input field name/placeholder to widget type.
+- Product preview rendering is now available for all dashboard widget types.

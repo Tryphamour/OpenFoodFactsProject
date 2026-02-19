@@ -93,6 +93,15 @@ Must demonstrate events, voters, attributes where relevant.
 - Test execution in container must force `APP_ENV=test` to preserve Symfony test-container guarantees.
 - Runtime secrets remain environment-driven; `.env.example` reflects safe local defaults only.
 
+## M10 Admin Provisioning Notes
+
+- Admin-only user creation interface implemented at:
+  - `GET/POST /admin/users/new`
+- Access policy:
+  - route requires `ROLE_ADMIN` through access control + controller attribute.
+- Provisioning behavior:
+  - normalized email, duplicate-email guard, minimum password length validation, password hashing before persistence.
+
 ## PostgreSQL Persistence Integration (Implemented)
 
 The following ports now use Doctrine-backed adapters:
